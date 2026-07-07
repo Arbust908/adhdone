@@ -13,7 +13,7 @@ export async function refreshSettings() {
   cachedSettings = db.select().from(schema.settings).where(eq(schema.settings.id, 1)).get() ?? null;
 }
 
-export default defineCronHandler('everyHour', async () => {
+export default defineCronHandler('hourly', async () => {
   if (!cachedSettings) await refreshSettings();
   if (!cachedSettings?.chatId) {
     if (!settingsWarned) {

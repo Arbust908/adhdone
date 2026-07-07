@@ -1,0 +1,12 @@
+services:
+  app:
+    build: .
+    ports:
+      - '3000:3000'
+    environment:
+      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
+      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
+      - DASHBOARD_PIN=${DASHBOARD_PIN}
+    volumes:
+      - ./data:/app/data
+    restart: unless-stopped

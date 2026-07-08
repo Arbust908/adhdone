@@ -1,5 +1,19 @@
 <template>
-  <div class="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-950 px-4">
+  <div class="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-950 px-4 relative">
+    <ClientOnly>
+      <UButton
+        :icon="isDark ? 'i-lucide-moon' : 'i-lucide-sun'"
+        variant="ghost"
+        color="neutral"
+        size="sm"
+        class="absolute top-4 right-4"
+        :aria-label="`Switch to ${isDark ? 'light' : 'dark'} mode`"
+        @click="toggleColorMode"
+      />
+      <template #fallback>
+        <div class="size-8 absolute top-4 right-4" />
+      </template>
+    </ClientOnly>
     <div class="w-full max-w-sm">
       <h1 class="text-2xl font-bold text-center mb-8 text-gray-900 dark:text-white">ADHDone</h1>
       <form @submit.prevent="handleLogin" class="space-y-4">
@@ -34,6 +48,17 @@
 
 <script setup lang="ts">
 definePageMeta({ layout: false });
+
+const colorMode = useColorMode();
+
+const isDark = computed({
+  get: () => colorMode.value === 'dark',
+  set: (v) => { colorMode.preference = v ? 'dark' : 'light'; },
+});
+
+function toggleColorMode() {
+  isDark.value = !isDark.value;
+}
 
 const pin = ref('');
 const error = ref('');

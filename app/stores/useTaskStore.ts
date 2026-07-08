@@ -60,19 +60,20 @@ export const useTaskStore = defineStore('tasks', () => {
 
   async function updateTask(id: number, data: Record<string, any>) {
     const idx = tasks.value.findIndex(t => t.id === id);
-    const previous = idx >= 0 ? { ...tasks.value[idx] } : null;
+    const current = idx >= 0 ? tasks.value[idx] : undefined;
+    const previous = current ? { ...current } : null;
 
     // Optimistic update
-    if (idx >= 0) {
-      if (data.title !== undefined) tasks.value[idx].title = data.title;
-      if (data.description !== undefined) tasks.value[idx].description = data.description;
-      if (data.deadline !== undefined) tasks.value[idx].deadline = data.deadline;
+    if (current) {
+      if (data.title !== undefined) current.title = data.title;
+      if (data.description !== undefined) current.description = data.description;
+      if (data.deadline !== undefined) current.deadline = data.deadline;
       if (data.reminderOffsets !== undefined) {
-        tasks.value[idx].reminderOffsets = JSON.stringify(data.reminderOffsets);
+        current.reminderOffsets = JSON.stringify(data.reminderOffsets);
       }
-      if (data.recurringCron !== undefined) tasks.value[idx].recurringCron = data.recurringCron;
+      if (data.recurringCron !== undefined) current.recurringCron = data.recurringCron;
       if (data.finished !== undefined) {
-        tasks.value[idx].finishedAt = data.finished ? new Date().toISOString() : null;
+        current.finishedAt = data.finished ? new Date().toISOString() : null;
       }
     }
 

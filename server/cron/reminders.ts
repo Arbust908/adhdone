@@ -83,7 +83,7 @@ export default defineCronHandler('hourly', async () => {
     .filter(t => t.recurringCron);
 
   for (const task of recurringTasks) {
-    const interval = cronParser.parseExpression(task.recurringCron!);
+    const interval = cronParser.parse(task.recurringCron!);
     const prev = interval.prev().toDate();
     const nowDate = now.toDate();
 

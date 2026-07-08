@@ -1,63 +1,40 @@
 <template>
-  <UModal
-    v-model:open="isOpen"
-    :title="isEditing ? 'Edit Task' : 'New Task'"
-    :ui="{ content: 'max-w-lg' }"
-    @update:open="handleClose"
-  >
+  <UModal v-model:open="isOpen" :title="isEditing ? 'Edit Task' : 'New Task'" :ui="{ content: 'max-w-lg' }"
+    @update:open="handleClose">
     <template #body>
       <!-- Finished banner -->
-      <div
-        v-if="isEditing && task?.finishedAt"
-        class="mb-4 p-3 bg-amber-50 dark:bg-amber-950 border border-amber-200 dark:border-amber-800 rounded text-sm text-amber-800 dark:text-amber-200"
-      >
+      <div v-if="isEditing && task?.finishedAt"
+        class="mb-4 p-3 bg-amber-50 dark:bg-amber-950 border border-amber-200 dark:border-amber-800 rounded text-md text-amber-800 dark:text-amber-200">
         This task was completed. Editing will reopen it.
       </div>
 
       <form @submit.prevent="handleSave" class="space-y-4">
         <!-- Title -->
         <div>
-          <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Title <span class="text-red-500">*</span></label>
-          <UInput
-            ref="titleInput"
-            v-model="form.title"
-            placeholder="What needs to be done?"
-            class="w-full mt-1"
-            :class="{ 'ring-red-500': titleError }"
-          />
-          <p v-if="titleError" class="text-xs text-red-500 mt-1">{{ titleError }}</p>
+          <label class="text-md font-medium text-gray-700 dark:text-gray-300">Title <span
+              class="text-red-500">*</span></label>
+          <UInput ref="titleInput" v-model="form.title" placeholder="What needs to be done?" class="w-full mt-1"
+            :class="{ 'ring-red-500': titleError }" />
+          <p v-if="titleError" class="text-sm text-red-500 mt-1">{{ titleError }}</p>
         </div>
 
         <!-- Description -->
         <div>
-          <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Description</label>
-          <UTextarea
-            v-model="form.description"
-            placeholder="Add details..."
-            :rows="3"
-            class="w-full mt-1"
-          />
+          <label class="text-md font-medium text-gray-700 dark:text-gray-300">Description</label>
+          <UTextarea v-model="form.description" placeholder="Add details..." :rows="3" class="w-full mt-1" />
         </div>
 
         <!-- AI Enhance button -->
-        <UButton
-          type="button"
-          variant="outline"
-          color="neutral"
-          icon="i-lucide-sparkles"
-          block
-          @click="aiModalOpen = true"
-        >
+        <UButton type="button" variant="outline" color="neutral" icon="i-lucide-sparkles" block
+          @click="() => { aiModalOpen = true }">
           Enhance with AI
         </UButton>
 
         <!-- Collapsible: Deadline -->
         <div>
-          <button
-            type="button"
-            class="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
-            @click="showDeadline = !showDeadline"
-          >
+          <button type="button"
+            class="flex items-center gap-2 text-md font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
+            @click="showDeadline = !showDeadline">
             <UIcon :name="showDeadline ? 'i-lucide-chevron-down' : 'i-lucide-chevron-right'" class="w-4 h-4" />
             📅 Add deadline
           </button>
@@ -68,27 +45,19 @@
 
         <!-- Collapsible: Reminders -->
         <div>
-          <button
-            type="button"
-            class="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
-            @click="showReminders = !showReminders"
-          >
+          <button type="button"
+            class="flex items-center gap-2 text-md font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
+            @click="showReminders = !showReminders">
             <UIcon :name="showReminders ? 'i-lucide-chevron-down' : 'i-lucide-chevron-right'" class="w-4 h-4" />
             🔔 Set reminders
           </button>
           <div v-if="showReminders" class="mt-2 space-y-2">
-            <div v-if="!reminderPresets.length" class="text-sm text-gray-400">No reminder presets configured. Add them in Settings.</div>
-            <label
-              v-for="preset in reminderPresets"
-              :key="preset.minutes"
-              class="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300 cursor-pointer"
-            >
-              <input
-                type="checkbox"
-                :checked="form.reminderOffsets.includes(preset.minutes)"
-                @change="toggleReminder(preset.minutes)"
-                class="rounded border-gray-300 dark:border-gray-600"
-              />
+            <div v-if="!reminderPresets.length" class="text-md text-gray-400">No reminder presets configured. Add them
+              in Settings.</div>
+            <label v-for="preset in reminderPresets" :key="preset.minutes"
+              class="flex items-center gap-2 text-md text-gray-700 dark:text-gray-300 cursor-pointer">
+              <input type="checkbox" :checked="form.reminderOffsets.includes(preset.minutes)"
+                @change="toggleReminder(preset.minutes)" class="rounded border-gray-300 dark:border-gray-600" />
               {{ preset.label }}
             </label>
           </div>
@@ -96,50 +65,34 @@
 
         <!-- Collapsible: Recurring -->
         <div>
-          <button
-            type="button"
-            class="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
-            @click="showRecurring = !showRecurring"
-          >
+          <button type="button"
+            class="flex items-center gap-2 text-md font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
+            @click="showRecurring = !showRecurring">
             <UIcon :name="showRecurring ? 'i-lucide-chevron-down' : 'i-lucide-chevron-right'" class="w-4 h-4" />
             🔄 Make recurring
           </button>
           <div v-if="showRecurring" class="mt-2 space-y-2">
             <!-- Shortcut buttons -->
             <div class="flex gap-1.5 flex-wrap">
-              <UButton
-                v-for="shortcut in shortcuts"
-                :key="shortcut.label"
-                type="button"
-                size="xs"
-                :variant="shortcut.active ? 'solid' : 'outline'"
-                :color="shortcut.active ? 'primary' : 'neutral'"
-                @click="shortcut.apply"
-              >
+              <UButton v-for="shortcut in shortcuts" :key="shortcut.label" type="button" size="xs"
+                :variant="shortcut.active ? 'solid' : 'outline'" :color="shortcut.active ? 'primary' : 'neutral'"
+                @click="shortcut.apply">
                 {{ shortcut.label }}
               </UButton>
             </div>
             <!-- Day checkboxes -->
             <div class="flex gap-1.5 flex-wrap">
-              <UButton
-                v-for="day in days"
-                :key="day.value"
-                type="button"
-                size="xs"
+              <UButton v-for="day in days" :key="day.value" type="button" size="xs"
                 :variant="recurringDays.includes(day.value) ? 'solid' : 'outline'"
-                :color="recurringDays.includes(day.value) ? 'primary' : 'neutral'"
-                @click="toggleDay(day.value)"
-              >
+                :color="recurringDays.includes(day.value) ? 'primary' : 'neutral'" @click="toggleDay(day.value)">
                 {{ day.label }}
               </UButton>
             </div>
             <!-- Hour dropdown -->
             <div class="flex items-center gap-2">
-              <span class="text-sm text-gray-500">at</span>
-              <select
-                v-model="recurringHour"
-                class="text-sm border border-gray-300 dark:border-gray-600 rounded px-2 py-1 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
-              >
+              <span class="text-md text-gray-500">at</span>
+              <select v-model="recurringHour"
+                class="text-md border border-gray-300 dark:border-gray-600 rounded px-2 py-1 bg-white dark:bg-gray-800 text-gray-900 dark:text-white">
                 <option v-for="h in 24" :key="h - 1" :value="h - 1">
                   {{ formatHour(h - 1) }}
                 </option>
@@ -154,12 +107,8 @@
       <div class="flex justify-between w-full">
         <UButton variant="ghost" color="neutral" @click="handleClose">Cancel</UButton>
         <div class="flex gap-2">
-          <UButton
-            v-if="isEditing && !task?.finishedAt"
-            variant="outline"
-            color="green"
-            @click="handleMarkDoneAndClose"
-          >
+          <UButton v-if="isEditing && !task?.finishedAt" variant="outline" color="success"
+            @click="handleMarkDoneAndClose">
             Mark Done
           </UButton>
           <UButton color="primary" @click="handleSave" :loading="isSaving">
@@ -170,12 +119,8 @@
     </template>
 
     <!-- Nested AI modal -->
-    <AiEnhanceModal
-      v-model:open="aiModalOpen"
-      :title="form.title || 'Task'"
-      :description="form.description || undefined"
-      @apply="handleAiApply"
-    />
+    <AiEnhanceModal v-model:open="aiModalOpen" :title="form.title || 'Task'"
+      :description="form.description || undefined" @apply="handleAiApply" />
   </UModal>
 </template>
 
@@ -235,22 +180,22 @@ const shortcuts = computed(() => [
   {
     label: 'All',
     active: recurringDays.value.length === 7,
-    apply: () => recurringDays.value = [0, 1, 2, 3, 4, 5, 6],
+    apply: () => { recurringDays.value = [0, 1, 2, 3, 4, 5, 6]; },
   },
   {
     label: 'Weekdays',
     active: recurringDays.value.length === 5 && !recurringDays.value.includes(5) && !recurringDays.value.includes(6),
-    apply: () => recurringDays.value = [0, 1, 2, 3, 4],
+    apply: () => { recurringDays.value = [0, 1, 2, 3, 4]; },
   },
   {
     label: 'Weekends',
     active: recurringDays.value.length === 2 && recurringDays.value.includes(5) && recurringDays.value.includes(6),
-    apply: () => recurringDays.value = [5, 6],
+    apply: () => { recurringDays.value = [5, 6]; },
   },
   {
     label: 'Clear',
     active: recurringDays.value.length === 0,
-    apply: () => recurringDays.value = [],
+    apply: () => { recurringDays.value = []; },
   },
 ]);
 
@@ -268,15 +213,19 @@ watch(() => props.task, (t) => {
       showRecurring.value = true;
       const parts = t.recurringCron.split(' ');
       if (parts.length >= 5) {
-        recurringHour.value = parseInt(parts[1]) || 9;
+        recurringHour.value = parseInt(parts[1] ?? '') || 9;
         const dayField = parts[4];
-        if (dayField === '*') {
+        if (!dayField) {
+          // no day-of-week field, leave recurringDays empty
+        } else if (dayField === '*') {
           recurringDays.value = [0, 1, 2, 3, 4, 5, 6];
         } else if (dayField.includes(',')) {
           recurringDays.value = dayField.split(',').map(Number);
         } else if (dayField.includes('-')) {
           const [start, end] = dayField.split('-').map(Number);
-          recurringDays.value = Array.from({ length: end - start + 1 }, (_, i) => start + i);
+          if (start !== undefined && end !== undefined) {
+            recurringDays.value = Array.from({ length: end - start + 1 }, (_, i) => start + i);
+          }
         } else {
           recurringDays.value = [parseInt(dayField)];
         }

@@ -9,23 +9,19 @@
     <div v-if="settingsStore.settings" class="space-y-8 max-w-lg">
       <!-- General -->
       <section>
-        <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-3">General</h3>
+        <h3 class="text-md font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-3">General</h3>
         <div class="space-y-3">
           <div>
-            <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Timezone</label>
-            <select
-              v-model="form.timezone"
-              class="w-full mt-1 border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
-            >
+            <label class="text-md font-medium text-gray-700 dark:text-gray-300">Timezone</label>
+            <select v-model="form.timezone"
+              class="w-full mt-1 border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 text-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white">
               <option v-for="tz in commonTimezones" :key="tz" :value="tz">{{ tz }}</option>
             </select>
           </div>
           <div>
-            <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Daily Digest Hour</label>
-            <select
-              v-model="form.dailyDigestHour"
-              class="w-full mt-1 border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
-            >
+            <label class="text-md font-medium text-gray-700 dark:text-gray-300">Daily Digest Hour</label>
+            <select v-model="form.dailyDigestHour"
+              class="w-full mt-1 border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 text-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white">
               <option v-for="h in 24" :key="h - 1" :value="h - 1">
                 {{ formatHour(h - 1) }}
               </option>
@@ -36,22 +32,17 @@
 
       <!-- Telegram -->
       <section>
-        <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-3">Telegram</h3>
+        <h3 class="text-md font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-3">Telegram</h3>
         <div class="space-y-3">
           <div>
-            <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Chat ID</label>
+            <label class="text-md font-medium text-gray-700 dark:text-gray-300">Chat ID</label>
             <UInput v-model="form.chatId" type="number" placeholder="Your Telegram chat ID" class="w-full mt-1" />
           </div>
-          <UButton
-            variant="outline"
-            color="neutral"
-            size="sm"
-            :loading="testingNotification"
-            @click="handleTestNotification"
-          >
+          <UButton variant="outline" color="neutral" size="sm" :loading="testingNotification"
+            @click="handleTestNotification">
             Send test notification
           </UButton>
-          <p v-if="testResult" class="text-sm" :class="testResult.success ? 'text-green-600' : 'text-red-500'">
+          <p v-if="testResult" class="text-md" :class="testResult.success ? 'text-green-600' : 'text-red-500'">
             {{ testResult.message }}
           </p>
         </div>
@@ -59,12 +50,10 @@
 
       <!-- AI -->
       <section>
-        <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-3">AI Model</h3>
+        <h3 class="text-md font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-3">AI Model</h3>
         <div>
-          <select
-            v-model="form.aiModel"
-            class="w-full border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
-          >
+          <select v-model="form.aiModel"
+            class="w-full border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 text-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white">
             <option value="deepseek/deepseek-chat">DeepSeek-V3</option>
             <option value="deepseek/deepseek-r1">DeepSeek-R1</option>
             <option value="openai/gpt-4o-mini">GPT-4o Mini</option>
@@ -76,41 +65,15 @@
 
       <!-- Reminder Presets -->
       <section>
-        <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-3">Reminder Presets</h3>
+        <h3 class="text-md font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-3">Reminder Presets
+        </h3>
         <div class="space-y-2">
-          <div
-            v-for="(preset, idx) in form.reminderPresets"
-            :key="idx"
-            class="flex items-center gap-2"
-          >
-            <UInput
-              v-model="preset.label"
-              placeholder="Label"
-              size="sm"
-              class="flex-1"
-            />
-            <UInput
-              v-model.number="preset.minutes"
-              type="number"
-              placeholder="Minutes"
-              size="sm"
-              class="w-24"
-            />
-            <UButton
-              icon="i-lucide-trash-2"
-              variant="ghost"
-              color="red"
-              size="xs"
-              @click="removePreset(idx)"
-            />
+          <div v-for="(preset, idx) in form.reminderPresets" :key="idx" class="flex items-center gap-2">
+            <UInput v-model="preset.label" placeholder="Label" size="sm" class="flex-1" />
+            <UInput v-model.number="preset.minutes" type="number" placeholder="Minutes" size="sm" class="w-24" />
+            <UButton icon="i-lucide-trash-2" variant="ghost" color="error" size="xs" @click="removePreset(idx)" />
           </div>
-          <UButton
-            variant="outline"
-            color="neutral"
-            size="xs"
-            icon="i-lucide-plus"
-            @click="addPreset"
-          >
+          <UButton variant="outline" color="neutral" size="xs" icon="i-lucide-plus" @click="addPreset">
             Add preset
           </UButton>
         </div>
@@ -118,28 +81,21 @@
 
       <!-- Save -->
       <div class="pt-4 border-t border-gray-200 dark:border-gray-800">
-        <UButton
-          color="primary"
-          :loading="settingsStore.isLoading"
-          @click="handleSave"
-        >
+        <UButton color="primary" :loading="settingsStore.isLoading" @click="handleSave">
           Save settings
         </UButton>
       </div>
 
       <!-- Notification Log -->
       <section>
-        <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-3">
+        <h3 class="text-md font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-3">
           Notification Log
         </h3>
-        <div v-if="logs.length === 0" class="text-sm text-gray-400">No errors logged.</div>
+        <div v-if="logs.length === 0" class="text-md text-gray-400">No errors logged.</div>
         <div v-else class="space-y-2">
-          <div
-            v-for="log in logs"
-            :key="log.id"
-            class="text-xs bg-gray-100 dark:bg-gray-800 rounded p-2 flex items-start gap-2"
-          >
-            <UBadge :color="eventTypeColor(log.eventType)" variant="soft" size="xs" class="flex-shrink-0 mt-0.5">
+          <div v-for="log in logs" :key="log.id"
+            class="text-sm bg-gray-100 dark:bg-gray-800 rounded p-2 flex items-start gap-2">
+            <UBadge :color="eventTypeColor(log.eventType)" variant="soft" size="xs" class="shrink-0 mt-0.5">
               {{ log.eventType }}
             </UBadge>
             <div class="flex-1 min-w-0">
@@ -235,7 +191,7 @@ onMounted(async () => {
 
 async function fetchLogs() {
   try {
-    logs.value = await $fetch('/api/logs', { query: { limit: '50' } });
+    logs.value = await $fetch<any[]>('/api/logs', { query: { limit: '50' } });
   } catch { /* ignore */ }
 }
 
@@ -251,13 +207,13 @@ function formatDate(d: string | null): string {
   return new Date(d).toLocaleString();
 }
 
-function eventTypeColor(type: string): string {
+function eventTypeColor(type: string): 'info' | 'warning' | 'secondary' | 'success' | 'neutral' {
   switch (type) {
-    case 'daily_digest': return 'blue';
-    case 'deadline_reminder': return 'amber';
-    case 'recurring_reminder': return 'purple';
-    case 'ai_enhance': return 'green';
-    default: return 'gray';
+    case 'daily_digest': return 'info';
+    case 'deadline_reminder': return 'warning';
+    case 'recurring_reminder': return 'secondary';
+    case 'ai_enhance': return 'success';
+    default: return 'neutral';
   }
 }
 
@@ -291,10 +247,10 @@ async function handleSave() {
       aiModel: form.aiModel,
       reminderPresets: form.reminderPresets,
     });
-    toast.add({ title: 'Settings saved', color: 'success', timeout: 2000 });
+    toast.add({ title: 'Settings saved', color: 'success', duration: 2000 });
     await fetchLogs();
   } catch (err: any) {
-    toast.add({ title: 'Failed to save settings', color: 'error', timeout: 3000 });
+    toast.add({ title: 'Failed to save settings', color: 'error', duration: 3000 });
   }
 }
 </script>

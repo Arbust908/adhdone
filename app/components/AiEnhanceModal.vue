@@ -5,26 +5,21 @@
         <!-- Step: Loading questions -->
         <div v-if="step === 'loading-questions'" class="flex flex-col items-center py-8 gap-3">
           <UIcon name="i-lucide-loader-circle" class="w-8 h-8 animate-spin text-primary" />
-          <p class="text-sm text-gray-500 dark:text-gray-400">Asking clarifying questions...</p>
+          <p class="text-md text-gray-500 dark:text-gray-400">Asking clarifying questions...</p>
         </div>
 
         <!-- Step: Questions -->
         <div v-else-if="step === 'questions'">
           <h3 class="font-medium text-gray-900 dark:text-white mb-3">Clarifying Questions</h3>
           <ul class="space-y-3 mb-4">
-            <li v-for="(q, i) in questions" :key="i" class="text-sm text-gray-600 dark:text-gray-300 flex gap-2">
-              <span class="font-medium text-gray-900 dark:text-white flex-shrink-0">{{ i + 1 }}.</span>
+            <li v-for="(q, i) in questions" :key="i" class="text-md text-gray-600 dark:text-gray-300 flex gap-2">
+              <span class="font-medium text-gray-900 dark:text-white shrink-0">{{ i + 1 }}.</span>
               <span>{{ q }}</span>
             </li>
           </ul>
-          <UTextarea
-            v-model="answers"
-            placeholder="Type your answers here..."
-            :rows="4"
-            class="w-full"
-          />
+          <UTextarea v-model="answers" placeholder="Type your answers here..." :rows="4" class="w-full" />
           <div class="flex justify-end mt-3">
-            <UButton color="primary" @click="handleGenerate" :disabled="!answers.trim()" :loading="step === 'loading-enhance'">
+            <UButton color="primary" @click="handleGenerate" :disabled="!answers.trim()">
               Generate
             </UButton>
           </div>
@@ -33,31 +28,35 @@
         <!-- Step: Loading enhance -->
         <div v-else-if="step === 'loading-enhance'" class="flex flex-col items-center py-8 gap-3">
           <UIcon name="i-lucide-loader-circle" class="w-8 h-8 animate-spin text-primary" />
-          <p class="text-sm text-gray-500 dark:text-gray-400">Generating enhanced task...</p>
+          <p class="text-md text-gray-500 dark:text-gray-400">Generating enhanced task...</p>
         </div>
 
         <!-- Step: Preview -->
         <div v-else-if="step === 'preview'">
           <div class="space-y-4">
             <div>
-              <label class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Original Title</label>
-              <p class="text-sm text-red-500 line-through mt-1">{{ originalTitle }}</p>
+              <label class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Original
+                Title</label>
+              <p class="text-md text-red-500 line-through mt-1">{{ originalTitle }}</p>
             </div>
             <div>
-              <label class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">New Title</label>
+              <label class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">New
+                Title</label>
               <UInput v-model="previewTitle" class="w-full mt-1" />
             </div>
             <div v-if="originalDescription">
-              <label class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Original Description</label>
-              <p class="text-sm text-red-500 line-through mt-1">{{ originalDescription }}</p>
+              <label class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Original
+                Description</label>
+              <p class="text-md text-red-500 line-through mt-1">{{ originalDescription }}</p>
             </div>
             <div>
-              <label class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">New Description</label>
+              <label class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">New
+                Description</label>
               <UTextarea v-model="previewDescription" :rows="4" class="w-full mt-1" />
             </div>
           </div>
           <div class="flex justify-between mt-4">
-            <UButton variant="outline" color="neutral" @click="step = 'questions'">Back</UButton>
+            <UButton variant="outline" color="neutral" @click="() => { step = 'questions' }">Back</UButton>
             <div class="flex gap-2">
               <UButton variant="outline" color="neutral" @click="handleRetry">Retry</UButton>
               <UButton color="primary" @click="handleApply">Apply</UButton>
@@ -66,7 +65,7 @@
         </div>
 
         <!-- Error -->
-        <div v-if="errorMsg" class="text-sm text-red-500 bg-red-50 dark:bg-red-950 p-3 rounded">
+        <div v-if="errorMsg" class="text-md text-red-500 bg-red-50 dark:bg-red-950 p-3 rounded">
           {{ errorMsg }}
         </div>
       </div>

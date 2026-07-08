@@ -131,15 +131,15 @@ async function handleFormSave(data: {
   try {
     if (editingTask.value) {
       await taskStore.updateTask(editingTask.value.id, data);
-      toast.add({ title: 'Task updated', color: 'success', timeout: 2000 });
+      toast.add({ title: 'Task updated', color: 'success', duration: 2000 });
     } else {
       await taskStore.createTask(data);
-      toast.add({ title: 'Task created', color: 'success', timeout: 2000 });
+      toast.add({ title: 'Task created', color: 'success', duration: 2000 });
     }
     formModalOpen.value = false;
     editingTask.value = null;
   } catch (err: any) {
-    toast.add({ title: err.statusMessage || 'Something went wrong', color: 'error', timeout: 3000 });
+    toast.add({ title: err.statusMessage || 'Something went wrong', color: 'error', duration: 3000 });
   } finally {
     isSaving.value = false;
   }
@@ -149,7 +149,7 @@ async function handleToggle(task: Task) {
   try {
     await taskStore.toggleComplete(task.id);
   } catch (err: any) {
-    toast.add({ title: 'Failed to update task', color: 'error', timeout: 3000 });
+    toast.add({ title: 'Failed to update task', color: 'error', duration: 3000 });
   }
 }
 
@@ -157,11 +157,11 @@ async function handleMarkDone() {
   if (!editingTask.value) return;
   try {
     await taskStore.updateTask(editingTask.value.id, { finished: true });
-    toast.add({ title: 'Task marked as done', color: 'success', timeout: 2000 });
+    toast.add({ title: 'Task marked as done', color: 'success', duration: 2000 });
     formModalOpen.value = false;
     editingTask.value = null;
   } catch (err: any) {
-    toast.add({ title: 'Failed to mark as done', color: 'error', timeout: 3000 });
+    toast.add({ title: 'Failed to mark as done', color: 'error', duration: 3000 });
   }
 }
 </script>
